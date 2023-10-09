@@ -1,7 +1,0 @@
-{
-  "files.associations": {
-    "**/home/over/Path/shellscript/**/*": "shellscript",
-    "**/home/over/Path/rust/**/*": "rust",
-    "maybe_int.h": "c"
-  }
-}
