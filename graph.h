@@ -1,12 +1,13 @@
-#include "libs/maybe_int.h"
+#include <stdbool.h>
 
-#define GRAPH_SIZE 64
+#define GRAPH_MAX_VALUE 100
 
 typedef struct {
-	MaybeInt adjacency[GRAPH_SIZE][GRAPH_SIZE];
+	bool adjacency[GRAPH_MAX_VALUE][GRAPH_MAX_VALUE];
+	bool is_directed;
 } Graph;
 
-Graph graph_new(void);
-void graph_add_edge(Graph *graph, int a, int b);
-void graph_del_edge(Graph *graph, int a, int b);
-bool graph_has_edge(Graph graph, int a, int b);
+Graph graph_new(bool is_directed);
+void graph_add_edge(Graph *graph, int from, int to);
+void graph_del_edge(Graph *graph, int from, int to);
+bool graph_has_edge(Graph graph, int from, int to);

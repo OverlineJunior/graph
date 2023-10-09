@@ -1,7 +1,7 @@
 all: main.exe run
 
-main.exe: main.c ../graph.c ../libs/maybe_int.c
-	@clang -Wall -o main.exe main.c ../graph.c ../libs/maybe_int.c
+main.exe: main.c ../graph.c
+	@clang -Wall -o main.exe main.c ../graph.c
 
 run: main.exe
 	@./main.exe
