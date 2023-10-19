@@ -78,6 +78,7 @@ Vertex *graph_get_vertex(Graph graph, int value) {
     return NULL;
 }
 
+// Errors if it exceeds the graph's max vertices.
 Vertex *graph_add_vertex(Graph *graph, int value) {
     assert_msg(graph->num_vertices < graph->max_vertices, "Cannot exceed graph's size");
 
