@@ -102,6 +102,10 @@ Edge *graph_get_edge(Graph graph, Vertex *v0, Vertex *v1) {
 }
 
 Edge *graph_add_edge(Graph *graph, Vertex *v0, Vertex *v1, int weight) {
+    Edge *match = graph_get_edge(*graph, v0, v1);
+    if (match != NULL)
+        return match;
+
     Edge *e = edge_new(v0, v1, weight);
     graph->edges[graph->num_edges] = e;
     graph->num_edges++;
