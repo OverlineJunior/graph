@@ -113,3 +113,10 @@ Edge *graph_add_edge(Graph *graph, Vertex *v0, Vertex *v1, int weight) {
 
     return e;
 }
+
+Edge *graph_add_edge_of(Graph *graph, int val0, int val1, int weight) {
+    Vertex *v0 = graph_add_vertex(graph, val0);
+    Vertex *v1 = graph_add_vertex(graph, val1);
+
+    return graph_add_edge(graph, v0, v1, weight);
+}
