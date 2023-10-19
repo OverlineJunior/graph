@@ -1,23 +1,24 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Fixes circular dependency between Vertex and Edge.
-struct Edge;
-
 typedef struct {
     int value;
-    struct Edge **edges;
 } Vertex;
 
 typedef struct {
+    Vertex *v0;
+    Vertex *v1;
     int weight;
-    struct Vertex **vertices;
 } Edge;
 
 typedef struct {
     Vertex **vertices;
     int num_vertices;
     int max_vertices;
+    Edge **edges;
+    int num_edges;
+    int max_edges;
 } Graph;
 
 void assert_msg(bool condition, char msg[]) {
@@ -27,18 +28,43 @@ void assert_msg(bool condition, char msg[]) {
     }
 }
 
-Vertex *vertex_new(int value) {
+Vertex *vertex_new(int value, int max_vertices) {
     Vertex *v = malloc(sizeof(Vertex));
     v->value = value;
 
     return v;
 }
 
+bool vertex_eq(Vertex *v0, Vertex *v1) {
+    // This is safe because it is not intended for more than one vertex to have the same value.
+    return v0->value == v1->value;
+}
+
+Edge *edge_new(Vertex *v0, Vertex *v1, int weight) {
+    Edge *e = malloc(sizeof(Edge));
+    e->weight = weight;
+    e->v0 = v0;
+    e->v1 = v1;
+
+    return e;
+}
+
+// Returns true if edge is given by v0 to v1 or vice versa.
+bool edge_has_indirect_link(Edge edge, Vertex *v0, Vertex *v1) {
+    return (vertex_eq(edge.v0, v0) && vertex_eq(edge.v1, v1))
+        || (vertex_eq(edge.v0, v1) && vertex_eq(edge.v1, v0));
+}
+
 Graph *graph_new(int max_vertices) {
+    int max_edges = max_vertices * (max_vertices - 1) / 2;
+
     Graph *g = malloc(sizeof(Graph));
     g->vertices = malloc(max_vertices * sizeof(Vertex *));
     g->num_vertices = 0;
     g->max_vertices = max_vertices;
+    g->edges = malloc(max_edges * sizeof(Edge *));
+    g->num_edges = 0;
+    g->max_edges = max_edges;
 
     return g;
 }
@@ -52,13 +78,33 @@ Vertex *graph_get_vertex(Graph graph, int value) {
     return NULL;
 }
 
-void graph_add_vertex(Graph *graph, int value) {
+Vertex *graph_add_vertex(Graph *graph, int value) {
     assert_msg(graph->num_vertices < graph->max_vertices, "Cannot exceed graph's size");
 
-    Vertex *v = graph_get_vertex(*graph, value);
-    if (v != NULL)
-        return;
+    Vertex *match = graph_get_vertex(*graph, value);
+    if (match != NULL)
+        return match;
 
-    graph->vertices[graph->num_vertices] = vertex_new(value);
+    Vertex *v = vertex_new(value, graph->max_vertices);
+    graph->vertices[graph->num_vertices] = v;
     graph->num_vertices++;
+
+    return v;
+}
+
+// Returns NULL if no edge between v0 and v1 is found.
+Edge *graph_get_edge(Graph graph, Vertex *v0, Vertex *v1) {
+    for (int i = 0; i < graph.num_edges; i++)
+        if (edge_has_indirect_link(*graph.edges[i], v0, v1))
+            return graph.edges[i];
+
+    return NULL;
+}
+
+Edge *graph_add_edge(Graph *graph, Vertex *v0, Vertex *v1, int weight) {
+    Edge *e = edge_new(v0, v1, weight);
+    graph->edges[graph->num_edges] = e;
+    graph->num_edges++;
+
+    return e;
 }

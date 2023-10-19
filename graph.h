@@ -1,21 +1,24 @@
-// Fixes circular dependency between Vertex and Edge.
-struct Edge;
-
 typedef struct {
     int value;
-    struct Edge **edges;
 } Vertex;
 
 typedef struct {
+    Vertex *v0;
+    Vertex *v1;
     int weight;
-    struct Vertex **vertices;
 } Edge;
 
 typedef struct {
     Vertex **vertices;
-    int numVertices;
+    int num_vertices;
+    int max_vertices;
+    Edge **edges;
+    int num_edges;
+    int max_edges;
 } Graph;
 
 Graph *graph_new(int numVertices);
 Vertex *graph_get_vertex(Graph graph, int value);
-void graph_add_vertex(Graph *graph, int value);
+Vertex *graph_add_vertex(Graph *graph, int value);
+Edge *graph_get_edge(Graph graph, Vertex *v0, Vertex *v1);
+Edge *graph_add_edge(Graph *graph, Vertex *v0, Vertex *v1, int weight);
