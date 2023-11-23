@@ -127,3 +127,22 @@ Edge *graph_get_edge_of(Graph graph, int val0, int val1) {
 
     return graph_get_edge(graph, v0, v1);
 }
+
+Vertex **graph_get_adjascent_vertices(Graph graph, Vertex *v) {
+    Vertex **adjascents = malloc(graph.num_vertices * sizeof(Vertex *));
+    int count = 0;
+
+    for (int i = 0; i < graph.num_edges; i++) {
+        Edge *e = graph.edges[i];
+
+        if (vertex_eq(e->v0, v)) {
+            adjascents[count] = e->v1;
+            count++;
+        } else if (vertex_eq(e->v1, v)) {
+            adjascents[count] = e->v0;
+            count++;
+        }
+    }
+
+    return adjascents;
+}
