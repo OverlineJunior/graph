@@ -120,3 +120,10 @@ Edge *graph_add_edge_of(Graph *graph, int val0, int val1, int weight) {
 
     return graph_add_edge(graph, v0, v1, weight);
 }
+
+Edge *graph_get_edge_of(Graph graph, int val0, int val1) {
+    Vertex *v0 = graph_get_vertex(graph, val0);
+    Vertex *v1 = graph_get_vertex(graph, val1);
+
+    return graph_get_edge(graph, v0, v1);
+}
