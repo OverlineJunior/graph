@@ -20,8 +20,8 @@ typedef struct {
 Graph *graph_new(int numVertices);
 Vertex *graph_get_vertex(Graph graph, int value);
 Vertex *graph_add_vertex(Graph *graph, int value);
+Vertex **graph_get_adjascent_vertices(Graph graph, Vertex *v);
 Edge *graph_get_edge(Graph graph, Vertex *v0, Vertex *v1);
 Edge *graph_add_edge(Graph *graph, Vertex *v0, Vertex *v1, int weight);
 Edge *graph_add_edge_of(Graph *graph, int val0, int val1, int weight);
 Edge *graph_get_edge_of(Graph graph, int val0, int val1);
-Vertex **graph_get_adjascent_vertices(Graph graph, Vertex *v);
